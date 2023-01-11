@@ -1,3 +1,4 @@
+"""Help goes here"""
 import os
 import sys
 import json
@@ -11,18 +12,18 @@ from .ui import Colors, Icons
 from .spinner import Spinner
 from .repo import Repo
 
-REPOS_REMOTES = bool(os.environ.get("REPOS_REMOTES", "1"))
-REPOS_TIMER = bool(os.environ.get("REPOS_TIMER", "0"))
-
-
-class ReposException:
-    pass
 
 class Repos:
 
     def __init__(self, root):
         self.root = root
         self.repos = {}
+
+
+    def isGitRepo(self) -> bool:
+        self.repo = Repo(self.root)
+        self.repo.load()
+        return self.repo.git
 
 
     def list(self):
@@ -112,9 +113,9 @@ class Repos:
         now = datetime.datetime.now().strftime("%Y-%m-%d-%H%M%S")
         print(f"Archiving repo {name}... ", end="", flush=True)
         repoDir = f"{self.root}/{name}"
-        archDir = f"{self.root}/.archived/{name}@{now}"
+        archivedDir = f"{self.root}/.archived/{name}@{now}"
 
-        if os.path.isdir(archDir):
+        if os.path.isdir(archivedDir):
             print(f" {Colors.GRAY}Skipped{Colors.RESET}")
             return
 
@@ -123,8 +124,8 @@ class Repos:
             exit(f"Error: Repo {name} is not an active repo.")
 
         os.system(f"mkdir -p {self.root}/_archived")
-        os.system(f"mv {repoDir} {archDir}")
-        print(f" {Colors.YELLOW}Archived{Colors.RESET} into {archDir}")
+        os.system(f"mv {repoDir} {archivedDir}")
+        print(f" {Colors.YELLOW}Archived{Colors.RESET} into {archivedDir}")
 
 
     def restore(self, name):
@@ -214,8 +215,8 @@ class Repos:
         }
 
         status_pad = 8 + self.pads['changes'] + self.pads['ahead'] + self.pads['behind'] + self.pads['branches'] + self.pads['remotes']
-        if REPOS_REMOTES:
-            status_pad += 2 + self.pads['remotes']
+        # if REPOS_REMOTES:
+        status_pad += 2 + self.pads['remotes']
 
         print(f"  {Colors.GRAY}{self.pad('STATUS', status_pad, False)}    {self.pad('NAME', self.pads['name'], False)}    {self.pad('BRANCH', self.pads['branch'], False)}{Colors.RESET}")
         print(f"  {Colors.GRAY}{'─' * status_pad}    {'─' * (self.pads['name'])}    {'─' * (self.pads['branch'] + 2)}{Colors.RESET}")
@@ -304,8 +305,8 @@ class Repos:
         text = f"{self.pad(changes, self.pads['changes'] + 2)} "
         text += f"{self.pad(behind, self.pads['behind'] + 2)} "
         text += f"{self.pad(ahead, self.pads['ahead'] + 2)}"
-        if REPOS_REMOTES:
-            text += f"{self.pad(remotes, self.pads['remotes'] + 2)}"
+        # if REPOS_REMOTES:
+        text += f"{self.pad(remotes, self.pads['remotes'] + 2)}"
         text += f"{self.pad(branches, self.pads['branches'] + 2)}"
 
         return f"{text}"
@@ -446,166 +447,19 @@ class Repos:
         repo = self.repos[name]
         print(repo)
 
-    def jsonCmd(self, *_):
+
+    def export(self, format: str):
         self.load()
-        data = {}
+        data = {
+            "repos": {}
+        }
         for dir, repo in self.repos.items():
-            data[dir] = repo.dict()
+            data["repos"][dir] = repo.dict()
 
-        print(json.dumps(data, indent=2))
+        if format == "json":
+            print(json.dumps(data, indent=2))
+            return True
 
-
-    def yamlCmd(self, *_):
-        self.load()
-        data = {}
-        for dir, repo in self.repos.items():
-            data[dir] = repo.dict()
-
-        print(yaml.dump(data, indent=2))
-
-
-    def slowCmd(self, *_):
-        self.list()
-        for _, repo in self.repos.items():
-            repo.load()
-        self.textCmd()
-
-
-    def textCmd(self, *_):
-        self.load()
-        self.text()
-
-
-    def helpCmd(self, *_):
-        # print(Format.text(__doc__)) #.replace("$0", PROGRAM)))
-        print(__doc__)
-        exit()
-
-
-    def versionCmd(self, *_):
-        print(VERSION)
-        exit()
-
-
-    def saveCmd(self, *args):
-        repos = args[1:]
-        if len(repos) > 0:
-            for repo in repos:
-                self.save(repo)
-        else:
-            print(f"Saving all configured repos")
-            self.configs()
-            for _, repo in self.repos.items():
-                config = repo.config
-                save = config.get("save", False)
-                if save == "true":
-                    # print(f"REPO {repo.dir}: {repo.config}")
-                    self.save(repo.name)
-
-
-    def enableCmd(self, *args):
-        name = args[1]
-        for arg in args[2:]:
-            self.enable(name, arg)
-
-
-    def pushCmd(self, *args):
-        for arg in args[1:]:
-            self.push(arg)
-        # self._load()
-        # for dir, repo in self.repos.items():
-        #     if repo.changes > 0:
-        #         print(f"{repo.changes:2}  {dir}")
-        #         repo.run("git add --all")
-        #         repo.run("git commit --message 'Saving it all'")
-
-
-    def archiveCmd(self, *args):
-        for arg in args[1:]:
-            self.archive(arg)
-
-
-    def archivedCmd(self, *_):
-        self.archived()
-
-
-    def restoreCmd(self, *args):
-        for arg in args[1:]:
-            self.restore(arg)
-
-
-    def flipCmd(self, *args):
-        for arg in args[1:]:
-            self.flip(arg)
-
-
-    def showCmd(self, *args):
-        self.load()
-        for arg in args[1:]:
-            self.show(arg)
-
-
-    def todosCmd(self, *args):
-        print()
-        print("TODOS:")
-        print("- Sync colors with prompt")
-        print("- Implement repo config:")
-        print()
-        print("    repos config repo1                  # Shows all configs for repo1")
-        print("    repos config repo1,repo2 key1,key2  # Shows key1 and key2 configs")
-        print("    repos config repo1,repo2 key=value  # Sets value for key")
-        print()
-        print("    Available configs:")
-        print("       repos.save      always| never | ask")
-        print("       repos.push      always| never | ask")
-        print("       repos.fetch     always| never | ask")
-        print("       repos.sync      always| never | ask")
-
-
-    def configCmd(self, *args):
-        name  = args[1] if len(args) > 1 else None
-        key   = args[2] if len(args) > 2 else None
-        value = args[3] if len(args) > 3 else None
-
-        if name is None:
-             print("Usage: repos config <repo>")
-             exit(1)
-
-        path = os.path.join(self.root, name)
-        repo = Repo(path)
-        # configFile = os.path.join(path, ".git", "repos.yaml")
-        # configExists = os.path.isfile(configFile)
-        # print(f"Running config repo {name}: {key} --> {value}")
-
-        repo.load()
-
-        if not repo.git:
-            print(f"Error: Repo {name} is not a valid git repo")
-            exit(1)
-
-        if key is None:
-            print(yaml.dump(repo.config))
-            return
-
-        if value is None:
-            print(repo.config(key, "(none)"))
-            return
-
-        data = {}
-        if configExists:
-            with open(configFile, "r") as f:
-                text = f.read()
-            if len(text.strip()) > 0:
-                data = yaml.safe_load(text)
-
-        data[key] = value
-        with open(configFile, "w") as f:
-            yaml.dump(
-                data,
-                f,
-                sort_keys=False,
-                indent=2,
-            )
-
-        # print(f"Saved config for repo {name}: {key} = {value} in {configFile} file.")
-        print(f"Saved config for repo '{name}': '{key}' = '{value}'")
+        if format == "yaml":
+            print(yaml.dump(data, indent=2))
+            return True

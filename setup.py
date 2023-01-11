@@ -1,9 +1,9 @@
-from setuptools import setup # find_packages
+from setuptools import setup
 from repos import cli
 
 setup(
     name="git-repos",
-    version="1.0.0",
+    version=cli.VERSION,
     description="Manages git repos inside a directory",
     long_description="Manages git repos inside a directory.",
     author="jpedro",
@@ -19,7 +19,9 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
     # packages=find_packages(),
-    packages=["repos"],
+    packages=[
+        "repos",
+    ],
     install_requires=[
         "click",
         "pyyaml",
