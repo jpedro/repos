@@ -9,7 +9,7 @@ setup(
     name="git-repos",
     version=cli.VERSION,
     description="Manages git repos inside a directory",
-    long_description=readme,
+    long_description="Manages git repos inside a directory.",
     readme="README.md",
     author="jpedro",
     author_email="jpedro.barbosa@gmail.com",
