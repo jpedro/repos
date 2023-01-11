@@ -1,11 +1,15 @@
 from setuptools import setup
 from repos import cli
 
+with open("README.md", "r") as f:
+    readme = f.read()
+
+
 setup(
     name="git-repos",
     version=cli.VERSION,
     description="Manages git repos inside a directory",
-    long_description="Manages git repos inside a directory.",
+    long_description=readme,
     author="jpedro",
     author_email="jpedro.barbosa@gmail.com",
     url="https://github.com/jpedro/git-repos",
