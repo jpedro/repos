@@ -10,6 +10,7 @@ setup(
     version=cli.VERSION,
     description="Manages git repos inside a directory",
     long_description=readme,
+    readme="README.md",
     author="jpedro",
     author_email="jpedro.barbosa@gmail.com",
     url="https://github.com/jpedro/git-repos",
