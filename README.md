@@ -60,3 +60,6 @@ USAGE
 - [ ] Code the `sync` subcommand to commits all changes, pull the latest ones,
       and push local commits to the upstream (obeys the `repo.sync = always |
       never | ask` git config).
+
+- [ ] Code the `repos.enabled` git config to turn off all other `repos.*`
+      configs.
