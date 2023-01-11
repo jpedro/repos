@@ -1,6 +1,8 @@
 # Git repos
 
 [![PyPI version](https://badge.fury.io/py/git-repos.svg)](https://badge.fury.io/py/git-repos)
+![This is very unstable](https://img.shields.io/badge/_Be_careful_:_This_package_is_unstable_-brightgreen)
+
 
 Manages git repos inside a directory.
 
