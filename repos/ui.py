@@ -40,36 +40,36 @@ class Icons:
     # DOWN   = "⬇"
 
 
-class Format:
+# class Format:
 
-    COLORS = {
-        "bold": "1",
-        "green": "32;1",
-        "gray": "38;5;244",
-    }
+#     COLORS = {
+#         "bold": "1",
+#         "green": "32;1",
+#         "gray": "38;5;244",
+#     }
 
-    # @staticmethod
-    # def color(match) -> str:
-    #     color = match.group(1)
-    #     text = match.group(2)
-    #     # print("-- COLOR", color)
-    #     # print("--  TEXT", text)
-    #     code = Format.COLORS.get(color)
-    #     if code:
-    #         return f"\033[{code}m{text}\033[0m"
+#     # @staticmethod
+#     # def color(match) -> str:
+#     #     color = match.group(1)
+#     #     text = match.group(2)
+#     #     # print("-- COLOR", color)
+#     #     # print("--  TEXT", text)
+#     #     code = Format.COLORS.get(color)
+#     #     if code:
+#     #         return f"\033[{code}m{text}\033[0m"
 
-    #     return f"\033[{color}m{text}\033[0m"
+#     #     return f"\033[{color}m{text}\033[0m"
 
-    @staticmethod
-    def text(text: str) -> str:
-        # Check for `*BOLD*`
-        text = re.sub("\*(.*?)\*", "\033[1m\\1\033[0m", text)
-        # Check for `_UNDERLINE_``
-        text = re.sub("\_(.*?)\_", "\033[4m\\1\033[0m", text)
-        # Parse for `c(<color> <text>)`
-        # text = re.sub("c\((.*?)\ (.*?)\)", "\033[\\1m\\2\033[0m", text)
-        text = re.sub("c\((.*?)\ (.*?)\)", Format.color, text)
-        text = re.sub("c\=(.*?)\ (.*)", Format.color, text)
-        # Parse for `b(<text>)`
-        # text = re.sub("b\((.*?)\)", "\033[1m\\1\033[0m", text)
-        return text
+#     @staticmethod
+#     def text(text: str) -> str:
+#         # Check for `*BOLD*`
+#         text = re.sub("\*(.*?)\*", "\033[1m\\1\033[0m", text)
+#         # Check for `_UNDERLINE_``
+#         text = re.sub("\_(.*?)\_", "\033[4m\\1\033[0m", text)
+#         # Parse for `c(<color> <text>)`
+#         # text = re.sub("c\((.*?)\ (.*?)\)", "\033[\\1m\\2\033[0m", text)
+#         text = re.sub("c\((.*?)\ (.*?)\)", Format.color, text)
+#         text = re.sub("c\=(.*?)\ (.*)", Format.color, text)
+#         # Parse for `b(<text>)`
+#         # text = re.sub("b\((.*?)\)", "\033[1m\\1\033[0m", text)
+#         return text

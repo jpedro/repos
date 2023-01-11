@@ -7,7 +7,7 @@ import threading
 import time
 import datetime
 
-from .ui import Format, Colors, Icons
+from .ui import Colors, Icons
 from .spinner import Spinner
 from .repo import Repo
 
@@ -477,7 +477,8 @@ class Repos:
 
 
     def helpCmd(self, *_):
-        print(Format.text(__doc__)) #.replace("$0", PROGRAM)))
+        # print(Format.text(__doc__)) #.replace("$0", PROGRAM)))
+        print(__doc__)
         exit()
 
 
