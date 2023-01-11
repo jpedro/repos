@@ -41,25 +41,29 @@ USAGE
 
 ## Todos
 
-- [ ] Create the `config` subcommand to store `git config repos.*` settings.
+- [ ] Code the `repos config <repo> [key] [value]` subcommand to
+      store `git config repos.*` in `./.git/config` file.
 
-- [ ] Create the `add <url>` subcommand to clone a git repo from an url
+- [ ] Create the `repos add <url>` subcommand to clone a git repo from
+      an url.
 
-- [ ] Create the `install [file]` subcommand to clone git repos from a file
-      (default `repos.yaml`).
+- [ ] Create the `repos install [file]` subcommand to clone git repos
+      from a file, by default `repos.yaml`.
 
-- [ ] Code the `save` subcommand to commit all changes (obeys the
-      `repo.save = always | never | ask` git config).
+- [ ] Code the `repos save [repo] [--yes]` subcommand to commit all
+      changes (obeys the `repo.save = always | never | ask` git config).
 
-- [ ] Code the `push` subcommand to send all commits to the upstream (obeys the
-      `repo.push = always | never | ask` git config).
+- [ ] Code the `repos push [repo] [--yes]` subcommand to send all
+      commits to the upstream (obeys the `repo.push = always | never |
+      ask` git config).
 
-- [ ] Code the `pull` subcommand to pull all the latest commits from the
-      upstream (obeys the `repo.pull = always | never | ask` git config).
-
-- [ ] Code the `sync` subcommand to commits all changes, pull the latest ones,
-      and push local commits to the upstream (obeys the `repo.sync = always |
+- [ ] Code the `repos pull [repo] [--yes]` subcommand to pull all the
+      latest commits from the upstream (obeys the `repo.pull = always |
       never | ask` git config).
+
+- [ ] Code the `repos sync [repo] [--yes]` subcommand to commits all
+      changes, pull the latest commits, and push local commits to the
+      upstream (obeys the `repo.sync = always | never | ask` git config).
 
 - [ ] Code the `repos.enabled` git config to turn off all other `repos.*`
       configs.
