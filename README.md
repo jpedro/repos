@@ -41,14 +41,14 @@ USAGE
 
 ## Todos
 
-- [ ] Code the `repos config <repo> [key] [value]` subcommand to
-      store `git config repos.*` in `./.git/config` file.
-
-- [ ] Create the `repos add <url>` subcommand to clone a git repo from
+- [ ] Code the `repos add <url>` subcommand to clone a git repo from
       an url.
 
-- [ ] Create the `repos install [file]` subcommand to clone git repos
+- [ ] Code the `repos install [file]` subcommand to clone git repos
       from a file, by default `repos.yaml`.
+
+- [ ] Code the `repos config [repo] [key] [value]` subcommand to
+      store `git config repos.*` in `./.git/config` file.
 
 - [ ] Code the `repos save [repo] [--yes]` subcommand to commit all
       changes (obeys the `repo.save = always | never | ask` git config).
