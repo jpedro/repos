@@ -21,6 +21,13 @@ class Icons:
     UP     = "↑"
     DOWN   = "↓"
     SOLO   = "✖"
+
+    GITHUB      = "" # ""
+    BITBUCKET   = ""
+    GITLAB      = ""
+    HEROKU      = "\ue77b"
+    AWS         = "\uf270"
+
     # SOLO   = "⏏"
     # SOLO   = "≡"
     # SOLO   = "⎈"

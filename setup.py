@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from git_repos.cli import VERSION, Repos
+from repos.cli import VERSION, Repos
 
 setup(
   name="git-repos",

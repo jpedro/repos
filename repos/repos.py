@@ -1,67 +1,15 @@
-#!/usr/bin/env python3
-"""NAME
-    repos —  Manages your git repos
-
-USAGE
-    repos                       # Lists all repos
-    repos --json                # Exports the repos as json
-    repos --yaml                # Exports the repos as yaml
-    repos show REPO             # Saves configured repos
-    repos save                  # Saves configured repos
-    repos push                  # Pushes to upstream
-    repos pull                  # Pulls from upstream
-    repos sync                  # Pull from upstream and save
-    repos --help                # Shows this help
-    repos --version             # Prints the current version
-"""
 import os
 import sys
 import json
 import yaml
-# import re
-# import math
 import subprocess
 import threading
 import time
 import datetime
 
-from format import Format
-from spinner import Spinner
-from repo import Repo
-
-
-VERSION = "v0.1.0"
-PROGRAM = os.path.basename(__file__)
-REPOS_REMOTES = os.environ.get("REPOS_REMOTES", 1)
-
-# COLOR_RESET   = "\033[0m"
-# COLOR_RED     = "\033[31;1m"
-# COLOR_GREEN   = "\033[32;1m"
-# COLOR_YELLOW  = "\033[38;5;220m"
-# COLOR_BLUE    = "\033[34;1m"
-# COLOR_GRAY    = "\033[38;5;242m"
-# COLOR_PALE    = "\033[38;5;248m"
-# COLOR_PINK    = "\033[38;5;198;1m"
-# COLOR_PURPLE  = "\033[38;5;207m"
-# COLOR_ORANGE  = "\033[38;5;208m"
-
-# ICON_DOT    = "•"
-# ICON_FLAG   = "⚑"
-# ICON_SQUARE = "▪"
-# ICON_DIFF   = "±"
-# ICON_UP     = "↑"
-# ICON_DOWN   = "↓"
-# ICON_SOLO   = "✖"
-# # ICON_SOLO   = "⏏"
-# # ICON_SOLO   = "≡"
-# # ICON_SOLO   = "⎈"
-# # ICON_BOMB   = "💣"
-# # ICON_DOT    = "."
-# # ICON_DIFF   = "⬍"
-# # ICON_UP     = "⇡"
-# # ICON_DOWN   = "⇣"
-# # ICON_UP     = "⬆"
-# # ICON_DOWN   = "⬇"
+from .ui import Format, Colors, Icons
+from .spinner import Spinner
+from .repo import Repo
 
 
 class ReposException:
@@ -121,15 +69,15 @@ class Repos:
         if isOn == "true":
             repo.run("git add --all")
             repo.run("git commit --message 'Saving it all'")
-            print(f"{COLOR_GREEN}Saved{COLOR_RESET}")
+            print(f"{Colors.GREEN}Saved{Colors.RESET}")
             return True
         else:
-            print(f"{COLOR_GRAY}Skipped{COLOR_RESET}")
+            print(f"{Colors.GRAY}Skipped{Colors.RESET}")
 
 
     def push(self, name):
         if not self.save(name):
-            print(f"Pushing repo {name}... {COLOR_GRAY}Skipped{COLOR_RESET}", flush=True)
+            print(f"Pushing repo {name}... {Colors.GRAY}Skipped{Colors.RESET}", flush=True)
             return
 
         print(f"Pushing repo {name}... ", end="", flush=True)
@@ -139,9 +87,9 @@ class Repos:
 
         if isOn == "true":
             repo.run("git push origin HEAD")
-            print(f"{COLOR_GREEN}Pushed{COLOR_RESET}")
+            print(f"{Colors.GREEN}Pushed{Colors.RESET}")
         else:
-            print(f"{COLOR_GRAY}Skipped{COLOR_RESET}")
+            print(f"{Colors.GRAY}Skipped{Colors.RESET}")
 
 
     def enable(self, name, feature):
@@ -151,10 +99,10 @@ class Repos:
         isOn = repo.run(f"git config repos.{feature}")
 
         if isOn == "true":
-            print(f"{COLOR_GRAY}Skipped{COLOR_RESET}")
+            print(f"{Colors.GRAY}Skipped{Colors.RESET}")
         else:
             repo.run(f"git config repos.{feature} true")
-            print(f"{COLOR_GREEN}Enabled{COLOR_RESET}")
+            print(f"{Colors.GREEN}Enabled{Colors.RESET}")
 
 
     def archive(self, name):
@@ -164,16 +112,16 @@ class Repos:
         archDir = f"{self.root}/.archived/{name}@{now}"
 
         if os.path.isdir(archDir):
-            print(f" {COLOR_GRAY}Skipped{COLOR_RESET}")
+            print(f" {Colors.GRAY}Skipped{Colors.RESET}")
             return
 
         if not os.path.isdir(repoDir):
-            print(f" {COLOR_RED}Fail{COLOR_RESET}")
+            print(f" {Colors.RED}Fail{Colors.RESET}")
             exit(f"Error: Repo {name} is not an active repo.")
 
         os.system(f"mkdir -p {self.root}/_archived")
         os.system(f"mv {repoDir} {archDir}")
-        print(f" {COLOR_YELLOW}Archived{COLOR_RESET} into {archDir}")
+        print(f" {Colors.YELLOW}Archived{Colors.RESET} into {archDir}")
 
 
     def restore(self, name):
@@ -182,15 +130,15 @@ class Repos:
         archDir = f"{self.root}/.archived/{name}"
 
         if os.path.isdir(repoDir):
-            print(f" {COLOR_GRAY}Skipped{COLOR_RESET}")
+            print(f" {Colors.GRAY}Skipped{Colors.RESET}")
             return
 
         if not os.path.isdir(archDir):
-            print(f" {COLOR_RED}Fail{COLOR_RESET}")
+            print(f" {Colors.RED}Fail{Colors.RESET}")
             exit(f"Error: Repo {name} is not an archived repo.")
 
         os.system(f"mv {self.root}/_archived/{name} {self.root}/{name}")
-        print(f" {COLOR_GREEN}Restored{COLOR_RESET}")
+        print(f" {Colors.GREEN}Restored{Colors.RESET}")
 
 
     def flip(self, name):
@@ -200,15 +148,15 @@ class Repos:
         if os.path.isdir(repoDir):
             os.system(f"mkdir -p {self.root}/.archived")
             os.system(f"mv {self.root}/{name} {self.root}/.archived/{name}")
-            print(f" {COLOR_YELLOW}Archived{COLOR_RESET}")
+            print(f" {Colors.YELLOW}Archived{Colors.RESET}")
             return
 
         if os.path.isdir(archDir):
             os.system(f"mv {self.root}/_archived/{name} {self.root}/{name}")
-            print(f" {COLOR_GREEN}Restored{COLOR_RESET}")
+            print(f" {Colors.GREEN}Restored{Colors.RESET}")
             return
 
-        print(f" {COLOR_RED}Fail{COLOR_RESET}")
+        print(f" {Colors.RED}Fail{Colors.RESET}")
         exit(f"Error: Repo {name} is neither an active nor an archived repo.")
 
 
@@ -249,7 +197,7 @@ class Repos:
 
 
     def text(self):
-        print(f"{COLOR_GRAY}  Repos in {COLOR_GREEN}{self.root}{COLOR_RESET}\n")
+        print(f"{Colors.GRAY}  Repos in {Colors.GREEN}{self.root}{Colors.RESET}\n")
 
         self.calc_pads(self.repos)
         self.total = {
@@ -266,74 +214,74 @@ class Repos:
         if REPOS_REMOTES:
             status_pad += 2 + self.pads['remotes']
 
-        print(f"  {COLOR_GRAY}{self.pad('STATUS', status_pad, False)}    {self.pad('NAME', self.pads['name'], False)}    {self.pad('BRANCH', self.pads['branch'], False)}{COLOR_RESET}")
-        print(f"  {COLOR_GRAY}{'─' * status_pad}    {'─' * (self.pads['name'])}    {'─' * (self.pads['branch'] + 2)}{COLOR_RESET}")
+        print(f"  {Colors.GRAY}{self.pad('STATUS', status_pad, False)}    {self.pad('NAME', self.pads['name'], False)}    {self.pad('BRANCH', self.pads['branch'], False)}{Colors.RESET}")
+        print(f"  {Colors.GRAY}{'─' * status_pad}    {'─' * (self.pads['name'])}    {'─' * (self.pads['branch'] + 2)}{Colors.RESET}")
 
         for _, repo in self.repos.items():
-            changes = f"{COLOR_GRAY}{ICON_DOT}{COLOR_RESET}"
-            ahead   = f"{COLOR_GRAY}{ICON_DOT}{COLOR_RESET}"
-            behind  = f"{COLOR_GRAY}{ICON_DOT}{COLOR_RESET}"
+            changes = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
+            ahead   = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
+            behind  = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
 
             if repo.changes > 0:
-                changes = f"{COLOR_YELLOW}{repo.changes}{ICON_DIFF}{COLOR_RESET}"
+                changes = f"{Colors.YELLOW}{repo.changes}{ICON_DIFF}{Colors.RESET}"
 
             if repo.ahead > 0:
-                ahead = f"{COLOR_GREEN}{repo.ahead}{ICON_UP}{COLOR_RESET}"
+                ahead = f"{Colors.GREEN}{repo.ahead}{ICON_UP}{Colors.RESET}"
 
             if repo.behind > 0:
-                behind = f"{COLOR_PURPLE}{repo.behind}{ICON_DOWN}{COLOR_RESET}"
+                behind = f"{Colors.PURPLE}{repo.behind}{ICON_DOWN}{Colors.RESET}"
 
             if not repo.git:
                 self.total["dir"] += 1
-                color   = COLOR_BLUE
+                color   = Colors.BLUE
                 changes = ""
                 ahead   = ""
                 behind  = ""
 
             elif len(repo.remotes) < 1:
                 self.total["solo"] += 1
-                color = COLOR_RED
+                color = Colors.RED
                 ahead = ""
-                behind = f"{COLOR_RED}{ICON_FLAG}{COLOR_RESET}"
+                behind = f"{Colors.RED}{ICON_FLAG}{Colors.RESET}"
 
             elif repo.upstream is None:
                 self.total["detached"] += 1
-                color = COLOR_ORANGE
-                ahead = f"{COLOR_ORANGE}{ICON_FLAG}{COLOR_RESET}"
+                color = Colors.ORANGE
+                ahead = f"{Colors.ORANGE}{ICON_FLAG}{Colors.RESET}"
                 behind = ""
 
             if repo.changes > 0:
                 self.total["changed"] += 1
-                color = COLOR_YELLOW
+                color = Colors.YELLOW
 
             elif repo.behind > 0:
                 self.total["behind"] += 1
-                color = COLOR_PURPLE
+                color = Colors.PURPLE
 
             elif repo.ahead > 0:
                 self.total["ahead"] += 1
-                color = COLOR_GREEN
+                color = Colors.GREEN
 
             elif repo.changes + repo.ahead + repo.behind == 0:
                 self.total["clean"] += 1
                 if repo.upstream:
-                    color = COLOR_GRAY
+                    color = Colors.GRAY
 
             else:
                 print(repo)
                 exit(55)
 
             if len(repo.branches) == 1:
-                branches = f"{COLOR_GRAY}{ICON_DOT}{COLOR_RESET}"
+                branches = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
             elif len(repo.branches) > 1:
-                branches = f"{COLOR_GRAY}{str(len(repo.branches))}{COLOR_RESET}"
+                branches = f"{Colors.GRAY}{str(len(repo.branches))}{Colors.RESET}"
             else:
                 branches = ""
 
             if len(repo.remotes) == 1:
-                remotes = f"{COLOR_GRAY}{ICON_DOT}{COLOR_RESET}"
+                remotes = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
             elif len(repo.remotes) > 1:
-                remotes = f"{COLOR_GRAY}{str(len(repo.remotes))}{COLOR_RESET}"
+                remotes = f"{Colors.GRAY}{str(len(repo.remotes))}{Colors.RESET}"
             else:
                 remotes = ""
 
@@ -343,7 +291,7 @@ class Repos:
             # text += f"{self.pad(repo.branch, self.pads['branch'], False)}"
 
             text += f"{repo.icon} {repo.branch}"
-            text += f"{COLOR_RESET}"
+            text += f"{Colors.RESET}"
             print(f" {status}  {text}")
 
         self.stats()
@@ -440,10 +388,10 @@ class Repos:
             report += f"\n{self.total['dir']:9} directories"
 
         if self.total["solo"]:
-            report += f"\n{self.total['solo']:9} without a remote {COLOR_RED}⚑{COLOR_PALE}"
+            report += f"\n{self.total['solo']:9} without a remote {Colors.RED}⚑{Colors.PALE}"
 
         if self.total["detached"]:
-            report += f"\n{self.total['detached']:9} without upstream {COLOR_ORANGE}⚑{COLOR_PALE}"
+            report += f"\n{self.total['detached']:9} without upstream {Colors.ORANGE}⚑{Colors.PALE}"
 
         if self.total["changed"]:
             report += f"\n{self.total['changed']:9} changed"
@@ -457,7 +405,7 @@ class Repos:
         if self.total["clean"]:
             report += f"\n{self.total['clean']:9} clean"
 
-        print(f"{COLOR_PALE}{report}{COLOR_RESET}")
+        print(f"{Colors.PALE}{report}{Colors.RESET}")
 
 
     # @yaspin(text=f"Loading from root...", color="green")
@@ -525,7 +473,7 @@ class Repos:
 
 
     def helpCmd(self, *_):
-        print(Format.text(__doc__.replace("$0", PROGRAM)))
+        print(Format.text(__doc__)) #.replace("$0", PROGRAM)))
         exit()
 
 
@@ -657,39 +605,3 @@ class Repos:
         # print(f"Saved config for repo {name}: {key} = {value} in {configFile} file.")
         print(f"Saved config for repo '{name}': '{key}' = '{value}'")
 
-
-def main():
-    if len(sys.argv) < 2:
-        cmd = "text"
-        args = []
-    else:
-        cmd = sys.argv[1]
-        args = sys.argv[1:]
-
-    # root  = os.path.expanduser("~/code")
-    root = os.getcwd()
-    repo = Repo(root)
-    repo.load()
-    if repo.git:
-        print(f"\033[31;1mError:\033[0m Run this command outside a git repo (using {root}).")
-        # print(f"       Using {root} dir.")
-        # print(f"↪  Using {root} dir.")
-        exit(1)
-
-    repos = Repos(root)
-    try:
-        start = time.perf_counter()
-        call = getattr(repos, f"{cmd}Cmd")
-        call(repos, *args[1:])
-        done = time.perf_counter() - start
-        showTimer = os.environ.get("REPOS_TIMER")
-        if showTimer:
-            print(f"\n  {COLOR_PALE}Took {(done * 1000):0.0f} ms{COLOR_RESET}", file=sys.stderr)
-
-    except Exception as e:
-        print(f"Error: `{e}`.", file=sys.stderr)
-        raise
-
-
-if __name__ == "__main__":
-    main()
