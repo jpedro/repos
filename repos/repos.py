@@ -11,6 +11,9 @@ from .ui import Format, Colors, Icons
 from .spinner import Spinner
 from .repo import Repo
 
+REPOS_REMOTES = bool(os.environ.get("REPOS_REMOTES", "1"))
+REPOS_TIMER = bool(os.environ.get("REPOS_TIMER", "0"))
+
 
 class ReposException:
     pass
@@ -218,18 +221,18 @@ class Repos:
         print(f"  {Colors.GRAY}{'─' * status_pad}    {'─' * (self.pads['name'])}    {'─' * (self.pads['branch'] + 2)}{Colors.RESET}")
 
         for _, repo in self.repos.items():
-            changes = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
-            ahead   = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
-            behind  = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
+            changes = f"{Colors.GRAY}{Icons.DOT}{Colors.RESET}"
+            ahead   = f"{Colors.GRAY}{Icons.DOT}{Colors.RESET}"
+            behind  = f"{Colors.GRAY}{Icons.DOT}{Colors.RESET}"
 
             if repo.changes > 0:
-                changes = f"{Colors.YELLOW}{repo.changes}{ICON_DIFF}{Colors.RESET}"
+                changes = f"{Colors.YELLOW}{repo.changes}{Icons.DIFF}{Colors.RESET}"
 
             if repo.ahead > 0:
-                ahead = f"{Colors.GREEN}{repo.ahead}{ICON_UP}{Colors.RESET}"
+                ahead = f"{Colors.GREEN}{repo.ahead}{Icons.UP}{Colors.RESET}"
 
             if repo.behind > 0:
-                behind = f"{Colors.PURPLE}{repo.behind}{ICON_DOWN}{Colors.RESET}"
+                behind = f"{Colors.PURPLE}{repo.behind}{Icons.DOWN}{Colors.RESET}"
 
             if not repo.git:
                 self.total["dir"] += 1
@@ -242,12 +245,12 @@ class Repos:
                 self.total["solo"] += 1
                 color = Colors.RED
                 ahead = ""
-                behind = f"{Colors.RED}{ICON_FLAG}{Colors.RESET}"
+                behind = f"{Colors.RED}{Icons.FLAG}{Colors.RESET}"
 
             elif repo.upstream is None:
                 self.total["detached"] += 1
                 color = Colors.ORANGE
-                ahead = f"{Colors.ORANGE}{ICON_FLAG}{Colors.RESET}"
+                ahead = f"{Colors.ORANGE}{Icons.FLAG}{Colors.RESET}"
                 behind = ""
 
             if repo.changes > 0:
@@ -272,14 +275,14 @@ class Repos:
                 exit(55)
 
             if len(repo.branches) == 1:
-                branches = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
+                branches = f"{Colors.GRAY}{Icons.DOT}{Colors.RESET}"
             elif len(repo.branches) > 1:
                 branches = f"{Colors.GRAY}{str(len(repo.branches))}{Colors.RESET}"
             else:
                 branches = ""
 
             if len(repo.remotes) == 1:
-                remotes = f"{Colors.GRAY}{ICON_DOT}{Colors.RESET}"
+                remotes = f"{Colors.GRAY}{Icons.DOT}{Colors.RESET}"
             elif len(repo.remotes) > 1:
                 remotes = f"{Colors.GRAY}{str(len(repo.remotes))}{Colors.RESET}"
             else:

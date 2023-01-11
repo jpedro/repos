@@ -1,4 +1,6 @@
 import os
+import time
+
 
 class Spinner:
     CHARS = ['⠏', '⠛', '⠹', '⠼', '⠶', '⠧']

@@ -1,9 +1,9 @@
-from setuptools import setup #, find_packages
+from setuptools import setup # find_packages
 from repos import cli
 
 setup(
     name="git-repos",
-    version=cli.VERSION,
+    version="1.0.0",
     description="Manages git repos inside a directory",
     long_description="Manages git repos inside a directory.",
     author="jpedro",
@@ -22,11 +22,12 @@ setup(
     packages=["repos"],
     install_requires=[
         "click",
+        "pyyaml",
     ],
     entry_points={
         "console_scripts": [
-        "git-repos=git_repos.cli:main"
-        "repos=git_repos.cli:main"
-        ]
+            "git-repos=repos.cli:main",
+            "repos=repos.cli:main",
+        ],
     },
 )
