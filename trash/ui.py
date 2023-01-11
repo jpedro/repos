@@ -48,17 +48,17 @@ class Format:
         "gray": "38;5;244",
     }
 
-    @staticmethod
-    def color(match: str) -> str:
-        color = match.group(1)
-        text = match.group(2)
-        # print("-- COLOR", color)
-        # print("--  TEXT", text)
-        code = Format.COLORS.get(color)
-        if code:
-            return f"\033[{code}m{text}\033[0m"
+    # @staticmethod
+    # def color(match) -> str:
+    #     color = match.group(1)
+    #     text = match.group(2)
+    #     # print("-- COLOR", color)
+    #     # print("--  TEXT", text)
+    #     code = Format.COLORS.get(color)
+    #     if code:
+    #         return f"\033[{code}m{text}\033[0m"
 
-        return f"\033[{color}m{text}\033[0m"
+    #     return f"\033[{color}m{text}\033[0m"
 
     @staticmethod
     def text(text: str) -> str:

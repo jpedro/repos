@@ -388,10 +388,11 @@ class Repos:
             report += f"\n{self.total['dir']:9} directories"
 
         if self.total["solo"]:
-            report += f"\n{self.total['solo']:9} without a remote {Colors.RED}⚑{Colors.PALE}"
+            report += f"\n{self.total['solo']:9} without a remote {Colors.RED}{Icons.FLAG}{Colors.PALE}"
 
         if self.total["detached"]:
-            report += f"\n{self.total['detached']:9} without upstream {Colors.ORANGE}⚑{Colors.PALE}"
+            # report += f"\n{self.total['detached']:9} without upstream {Colors.ORANGE}⚑{Colors.PALE}"
+            report += f"\n{self.total['detached']:9} without upstream {Colors.ORANGE}{Icons.FLAG}{Colors.PALE}"
 
         if self.total["changed"]:
             report += f"\n{self.total['changed']:9} changed"
@@ -604,4 +605,3 @@ class Repos:
 
         # print(f"Saved config for repo {name}: {key} = {value} in {configFile} file.")
         print(f"Saved config for repo '{name}': '{key}' = '{value}'")
-
