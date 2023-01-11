@@ -6,11 +6,11 @@ USAGE
     repos                       # Lists all repos in text format
     repos export --json         # Exports all repos as json
     repos export --yaml         # Exports all repos as yaml
-    repos show REPO             # Saves configured repos
-    repos save                  # Saves configured repos
-    repos push                  # Pushes to upstream
-    repos pull                  # Pulls from upstream
-    repos sync                  # Pull from upstream and save
+    repos show REPO             # Shows the repo details
+    repos save                  # Commits local changes
+    repos push                  # Pushes up to the upstream
+    repos pull                  # Pulls from the upstream
+    repos sync                  # Pull from the upstream and pushes up
     repos help                  # Shows this help
     repos version               # Prints the current version
 """
