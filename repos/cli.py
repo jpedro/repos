@@ -17,13 +17,12 @@ USAGE
 import os
 import sys
 import time
-import click
 
 from .ui import Colors
 from .repos import Repos
 
 
-VERSION = "v0.1.0"
+VERSION = "0.1.1"
 REPOS_TIMER = bool(os.environ.get("REPOS_TIMER", ""))
 
 class CliException(BaseException):
