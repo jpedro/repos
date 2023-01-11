@@ -22,7 +22,7 @@ from .ui import Colors
 from .repos import Repos
 
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 REPOS_TIMER = bool(os.environ.get("REPOS_TIMER", ""))
 
 class CliException(BaseException):
@@ -61,8 +61,6 @@ class Cli:
 
 
     def helpCmd(self, *args):
-        # print(args); exit(99)
-        # print(Format.text(__doc__)) #.replace("$0", PROGRAM)))
         print(__doc__)
         exit()
 
@@ -208,9 +206,7 @@ def main():
     root = os.getcwd()
     repos = Repos(root)
     if repos.isGitRepo():
-        print(f"\033[31;1mError:\033[0m You are running this command inside a git repo ({root}).")
-        # print(f"       Using {root} dir.")
-        # print(f"↪  Using {root} dir.")
+        print(f"\033[31;1mError:\033[0m You are running inside a git repo ({root}).")
         exit(1)
 
     cli = Cli(repos)
