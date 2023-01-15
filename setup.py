@@ -1,12 +1,12 @@
 from setuptools import setup
-from repos import cli
+from repos import cli, VERSION
 
 with open("README.md", "r") as f:
     readme = f.read()
 
 setup(
     name="repos",
-    version=cli.VERSION,
+    version=VERSION,
     description="Manages git repos inside a directory",
     long_description=readme,
     long_description_content_type="text/markdown",

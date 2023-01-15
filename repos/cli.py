@@ -22,7 +22,6 @@ from .ui import Colors
 from .repos import Repos
 
 
-VERSION = "0.1.4"
 REPOS_TIMER = bool(os.environ.get("REPOS_TIMER", ""))
 
 class CliException(BaseException):
