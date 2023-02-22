@@ -267,12 +267,13 @@ class Repos:
                 color = Colors.GREEN
 
             elif repo.changes + repo.ahead + repo.behind == 0:
-                self.total["clean"] += 1
-                if repo.upstream:
-                    color = Colors.GRAY
+                if repo.git:
+                    self.total["clean"] += 1
+                    if repo.upstream:
+                        color = Colors.GRAY
 
             else:
-                print(repo)
+                print(f"What happened here? {repo}")
                 exit(55)
 
             if len(repo.branches) == 1:
