@@ -1,6 +1,6 @@
-# Git repos
+# Repos
 
-[![PyPI version](https://badge.fury.io/py/git-repos.svg)](https://badge.fury.io/py/git-repos)
+[![PyPI version](https://badge.fury.io/py/repos.svg)](https://badge.fury.io/py/repos)
 [![Unstable package](https://img.shields.io/badge/_Unstable_package_-_This_code_is_a_work_in_progress_-red)](https://semver.org)
 
 
@@ -9,7 +9,7 @@ Manages git repos inside a directory.
 
 ## Install
 
-    pip install git-repos
+    pip install repos
 
 
 ## Usage

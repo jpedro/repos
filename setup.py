@@ -28,6 +28,7 @@ setup(
     ],
     install_requires=[
         "pyyaml",
+        "click",
     ],
     entry_points={
         "console_scripts": [
