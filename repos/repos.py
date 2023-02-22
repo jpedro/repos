@@ -273,8 +273,8 @@ class Repos:
                         color = Colors.GRAY
 
             else:
-                print(f"What happened here? {repo}")
-                exit(55)
+                print(repo)
+                raise Exception(f"What happened here?")
 
             if len(repo.branches) == 1:
                 branches = f"{Colors.GRAY}{Icons.DOT}{Colors.RESET}"
