@@ -36,7 +36,7 @@ Inside a directory with several git repos run:
             1 changed
             1 behind
             6 clean
-```
+
 
 To check all available commands:
 
