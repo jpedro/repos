@@ -21,11 +21,11 @@ Inside a directory with several git repos run:
 
     STATUS              NAME                            BRANCH
     ────────────────   ────────────────────────────    ──────────
-    •   •   •  •  •    this-is-a-ahead-repo              master
+    •   •  1↑  •  •    this-is-a-ahead-repo              master
     •  1↓   •  •  •    this-is-a-behind-repo             master
     •   •   •  •  •    this-is-a-clean-repo              master
                        this-is-a-directory/
-    1±       ⚑  •  •   this-is-a-dirty-repo              master
+    1±      ⚑  •  •    this-is-a-dirty-repo              master
     •   ⚑         •    this-repo-has-no-remotes          master
     •   •   •  •  3    this-repo-has-three-branches      branch-3
     •   •   •  2  •    this-repo-has-two-remotes         master
