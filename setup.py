@@ -27,7 +27,7 @@ setup(
         "repos",
     ],
     install_requires=[
-        "pyyaml",
+        "pyaml",
         "click",
     ],
     entry_points={
