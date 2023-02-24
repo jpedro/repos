@@ -11,8 +11,8 @@ build: ### Builds this package
 # 	@echo "Next version: $(shell git next)"
 # 	@echo "VERSION = \"$(shell git next)\"" > repos/__init__.py
 
-.PHONY: release
-release: build ### Publishes a new version
+.PHONY: go
+go: build ### Publishes a new version
 	### This expects this file set up:
 	###     $ cat ~/.pypirc
 	###     [pypi]
