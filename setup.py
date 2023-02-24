@@ -27,8 +27,8 @@ setup(
         "repos",
     ],
     install_requires=[
-        "pyaml",
         "click",
+        "pyaml",
     ],
     entry_points={
         "console_scripts": [
