@@ -28,6 +28,7 @@ setup(
     ],
     install_requires=[
         "click",
+        "PyYaml",
         "pyaml",
     ],
     entry_points={
