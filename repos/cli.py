@@ -202,7 +202,8 @@ def findTopDir(root: str) -> str:
     repo.load()
     if repo.git:
         root = os.path.dirname(repo.root)
-        print(f"\033[33;1mWarning:\033[0m You are inside a git repo. Using {root} instead.\n")
+        print(f"\033[33;1mWarning:\033[0m You are inside a git repo. Using {root} instead.")
+        print()
 
     return root
 
