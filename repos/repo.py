@@ -8,6 +8,7 @@ class Repo:
     def __init__(self, dir):
         self.dir      = dir
         self.name     = os.path.basename(dir)
+        self.root     = False
         self.git      = False
 
         self.branch   = ""
@@ -35,6 +36,7 @@ class Repo:
         if self.git is False:
             return
 
+        self.root     = self.run("git rev-parse --show-toplevel")
         self.ref      = self.run("git symbolic-ref HEAD")
         self.branch   = self.ref.replace("refs/heads/", "")
         self.changes  = int(self.run("git status --porcelain | wc -l"))
@@ -110,6 +112,7 @@ class Repo:
         return f"""
         Repo
             name      {self.name}
+            root      {self.root}
             dir       {self.dir}
             git       {self.git}
 

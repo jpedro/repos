@@ -18,7 +18,9 @@ import os
 import sys
 import time
 
+from . import VERSION
 from .ui import Colors
+from .repo import Repo
 from .repos import Repos
 
 
@@ -35,6 +37,7 @@ class Cli:
 
 
     def exportCmd(self, *args):
+        # self.ensureNotInsideRepo()
         format = args[1] if len(args) > 1 else "--yaml"
         if format == "--json":
             self.repos.export("json")
@@ -48,6 +51,7 @@ class Cli:
 
 
     def slowCmd(self, *_):
+        # self.ensureNotInsideRepo()
         self.repos.list()
         for _, repo in self.repos.items():
             repo.load()
@@ -55,6 +59,7 @@ class Cli:
 
 
     def textCmd(self, *_):
+        # self.ensureNotInsideRepo()
         self.repos.load()
         self.repos.text()
 
@@ -192,6 +197,15 @@ class Cli:
     #     # print(f"Saved config for repo {name}: {key} = {value} in {configFile} file.")
     #     print(f"Saved config for repo '{name}': '{key}' = '{value}'")
 
+def findTopDir(root: str) -> str:
+    repo = Repo(root)
+    repo.load()
+    if repo.git:
+        root = os.path.dirname(repo.root)
+        print(f"\033[33;1mWarning:\033[0m You are inside a git repo. Using {root} instead.\n")
+
+    return root
+
 
 def main():
     if len(sys.argv) < 2:
@@ -203,11 +217,8 @@ def main():
 
     # root  = os.path.expanduser("~/code")
     root = os.getcwd()
+    root = findTopDir(root)
     repos = Repos(root)
-    if repos.isGitRepo():
-        print(f"\033[31;1mError:\033[0m You are running inside a git repo ({root}).")
-        exit(1)
-
     cli = Cli(repos)
     try:
         start = time.perf_counter()

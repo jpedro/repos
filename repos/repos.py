@@ -20,7 +20,7 @@ class Repos:
         self.repos = {}
 
 
-    def isGitRepo(self) -> bool:
+    def insideRepo(self) -> bool:
         self.repo = Repo(self.root)
         self.repo.load()
         return self.repo.git
